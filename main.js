@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'geojson',
           data: data,
           cluster: true,
-          clusterRadius: 20
+          clusterRadius: 20,
+          attribution: 'by <b><a href="https://github.com/SavelevGeo">SavelevGeo</a></b> | <b><a href="https://cartetika.ru/geovacancy">Страница геовакансий</a></b>'
         });
 
         //clustered_points
