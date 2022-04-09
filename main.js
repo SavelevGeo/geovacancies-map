@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 //for map moving (unfinished)
                 var popupElement = document.querySelector('.popup');
                 var rect = popupElement.getBoundingClientRect();
-                console.log(rect);
+                //console.log(rect);
 
                 //event listeners for expanding vacancies data
                 var vacElements = document.querySelectorAll('.vacancy__header');
