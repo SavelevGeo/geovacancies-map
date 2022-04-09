@@ -1,0 +1,65 @@
+body {
+    margin: 0; padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+h1 {
+    position: absolute;
+    text-align: center;
+    margin: 30px 0 0 30px; padding: 0;
+    font-weight: 600;
+    font-size: 30px;
+    z-index: 2;
+}
+
+#map {
+    height: 100vh;
+    z-index: 1;
+}
+
+.popup {
+    max-width: 65vw !important;
+}
+
+.mapboxgl-popup-content {
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    background-color: transparent;
+}
+
+.vacancy {
+    max-width: 175px;
+    text-align: right;
+    background-color: #fbe37b;
+    color: #222027;
+    font-size: 12px;
+
+    margin: 5px; padding: 5px;
+}
+
+.vacancy__header {
+    margin: 0; padding: 0;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.vacancy__header:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+}
+
+.vacancy__company { font-weight: 300; }
+
+.cart_link { float: left; }
+
+.vacancy__salary {
+    font-weight: 300;
+    font-style: italic;
+    float: right;
+    max-width: 140px;
+}
+
