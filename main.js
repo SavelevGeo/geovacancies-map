@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     center: [55, 55],
     zoom: 3
   });
-
-  const gDocLink = 'https://docs.google.com/spreadsheets/d/1DmxeJff1bqYY-VgeRuyr9fmfNldNcNfIaCQEjT9j7Yc/gviz/tq?tqx=out:csv&sheet=Лист1';
+  
+  const gDocLink = 'https://docs.google.com/spreadsheets/d/183Rw_ES98k4C2_0VyYfx8XW52ECW5wKIRy7KnRZ74k8/gviz/tq?tqx=out:csv&sheet=Лист1';
   fetch(gDocLink)
     .then(csvResponse => csvResponse.text())
     .then(csvData => addToMap(csvData));
