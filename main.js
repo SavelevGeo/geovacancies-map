@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const coordinates = feat.geometry.coordinates.slice();
 
           if (feat.properties.cluster) {
-            var popupHTML = '';
             clusterSource.getClusterLeaves(
               feat.properties.cluster_id,
               feat.properties.point_count,
