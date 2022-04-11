@@ -144,6 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const clusterSource = map.getSource('vacancies');
+        
+        function addPopup(coords, popHTML) {
+          popup.setLngLat(coords).setHTML(popHTML).addTo(map);
+
+          //event listeners for expanding vacancies data
+          var vacElements = document.querySelectorAll('.vacancy__header');            
+          vacElements.forEach((e) => e.addEventListener('click', expandVac));
+        };
 
         function displayPopup(e) {
           //geting clicked feature and its geometry
@@ -155,23 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
               feat.properties.cluster_id,
               feat.properties.point_count,
               0, (error, clusteredFeatures) => {
-                //create popup
+                //fill popup
+                let popupHTML = '';
                 clusteredFeatures.forEach(f => popupHTML += getVacancyDesc(f));
-                popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
-
-                //event listeners for expanding vacancies data
-                var vacElements = document.querySelectorAll('.vacancy__header');
-                vacElements.forEach((e) => e.addEventListener('click', expandVac));
+                addPopup(coordinates, popupHTML);
               });
           }
           else {
             //create popup
-            popupHTML = getVacancyDesc(feat);
-            popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
-
-            //event listeners for expanding vacancies data
-            var vacElement = document.querySelector('.vacancy__header');
-            vacElement.addEventListener('click', expandVac);
+            let popupHTML = getVacancyDesc(feat);
+            addPopup(coordinates, popupHTML);
           };
         };
 
