@@ -56,6 +56,11 @@ h1 {
 
 .cart_link { float: left; }
 
+.cart_link:hover { 
+  outline: 2px solid white;
+  border-radius: 50%;
+}
+
 .vacancy__salary {
     font-weight: 300;
     font-style: italic;
