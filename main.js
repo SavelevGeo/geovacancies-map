@@ -144,36 +144,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const clusterSource = map.getSource('vacancies');
-        
-        function addPopup(coords, popHTML) {
-          popup.setLngLat(coords).setHTML(popHTML).addTo(map);
-
-          //event listeners for expanding vacancies data
-          var vacElements = document.querySelectorAll('.vacancy__header');            
-          vacElements.forEach((e) => e.addEventListener('click', expandVac));
-        };
 
         function displayPopup(e) {
           //geting clicked feature and its geometry
           const feat = e.features[0];
           const coordinates = feat.geometry.coordinates.slice();
-
+          
           if (feat.properties.cluster) {
             clusterSource.getClusterLeaves(
               feat.properties.cluster_id,
               feat.properties.point_count,
               0, (error, clusteredFeatures) => {
                 //fill popup
-                let popupHTML = '';
+                popupHTML = '';
                 clusteredFeatures.forEach(f => popupHTML += getVacancyDesc(f));
-                addPopup(coordinates, popupHTML);
+                addPopup();
               });
           }
           else {
             //create popup
-            let popupHTML = getVacancyDesc(feat);
-            addPopup(coordinates, popupHTML);
+            popupHTML = getVacancyDesc(feat);
+            addPopup();
           };
+          
+          function addPopup() {
+          popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
+
+          //event listeners for expanding vacancies data
+          var vacElements = document.querySelectorAll('.vacancy__header');            
+          vacElements.forEach((e) => e.addEventListener('click', expandVac));
+        };
         };
 
         //hovering from cluster point event
