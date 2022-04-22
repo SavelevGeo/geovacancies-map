@@ -12,9 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // disable map rotation using touch rotation gesture
   map.touchZoomRotate.disableRotation();
 
-  //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
+  //https://stackoverflow.com/a/326076/13348813
+  function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+  };
     // Checking if webpage is embedded
-    if (window.location !== window.parent.location) {
+    if (inIframe) {
         // The page is in an iFrame
         map.scrollZoom.disable();
         map.addControl(new mapboxgl.NavigationControl({showCompass: false}));
