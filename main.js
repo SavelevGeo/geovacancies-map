@@ -13,9 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   map.touchZoomRotate.disableRotation();
 
   //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
-  var gfg = window.frameElement;
     // Checking if webpage is embedded
-    if (gfg) {
+    if (window.location !== window.parent.location) {
         // The page is in an iFrame
         map.scrollZoom.disable();
         map.addControl(new mapboxgl.NavigationControl({showCompass: false}));
