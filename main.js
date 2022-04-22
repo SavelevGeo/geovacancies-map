@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const gDocLink = 'https://docs.google.com/spreadsheets/d/183Rw_ES98k4C2_0VyYfx8XW52ECW5wKIRy7KnRZ74k8/gviz/tq?tqx=out:csv&sheet=Лист1';
+  
   fetch(gDocLink)
     .then(csvResponse => csvResponse.text())
-    .then(csvData => addToMap(csvData));
+    .then(csvData => addToMap(csvData))
+    .then(iniFrame());
 
   function addToMap(csvText) {
     csv2geojson.csv2geojson(csvText, {
@@ -187,5 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
         map.on('mouseleave', 'clusters', hidePopup);
         map.on('mouseleave', 'unclustered', hidePopup);
       });
+  };
+
+  //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
+  function iniFrame() {
+    var gfg = window.frameElement;
+    // Checking if webpage is embedded
+    if (gfg) {
+        // The page is in an iFrame
+        map.scrollZoom.disable();
+        map.addControl(new mapboxgl.NavigationControl());
+    }
   };
 });
