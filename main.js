@@ -7,13 +7,25 @@ document.addEventListener('DOMContentLoaded', () => {
     center: [55, 55],
     zoom: 3
   });
+    // disable map rotation using right click + drag
+  map.dragRotate.disable();
+  // disable map rotation using touch rotation gesture
+  map.touchZoomRotate.disableRotation();
+
+  //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
+  var gfg = window.frameElement;
+    // Checking if webpage is embedded
+    if (gfg) {
+        // The page is in an iFrame
+        map.scrollZoom.disable();
+        map.addControl(new mapboxgl.NavigationControl({showCompass: false}));
+    }
 
   const gDocLink = 'https://docs.google.com/spreadsheets/d/183Rw_ES98k4C2_0VyYfx8XW52ECW5wKIRy7KnRZ74k8/gviz/tq?tqx=out:csv&sheet=Лист1';
   
   fetch(gDocLink)
     .then(csvResponse => csvResponse.text())
-    .then(csvData => addToMap(csvData))
-    .then(iniFrame());
+    .then(csvData => addToMap(csvData));
 
   function addToMap(csvText) {
     csv2geojson.csv2geojson(csvText, {
@@ -191,14 +203,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
-  function iniFrame() {
-    var gfg = window.frameElement;
-    // Checking if webpage is embedded
-    if (gfg) {
-        // The page is in an iFrame
-        map.scrollZoom.disable();
-        map.addControl(new mapboxgl.NavigationControl());
-    }
-  };
 });
