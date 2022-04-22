@@ -7,17 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     center: [55, 55],
     zoom: 3
   });
-  
+    // disable map rotation using right click + drag
+  map.dragRotate.disable();
+  // disable map rotation using touch rotation gesture
+  map.touchZoomRotate.disableRotation();
+
+  //https://www.geeksforgeeks.org/how-to-check-a-webpage-is-loaded-inside-an-iframe-or-into-the-browser-window-using-javascript/
+  var gfg = window.frameElement;
+    // Checking if webpage is embedded
+    if (gfg) {
+        // The page is in an iFrame
+        map.scrollZoom.disable();
+        map.addControl(new mapboxgl.NavigationControl({showCompass: false}));
+    }
+
   const gDocLink = 'https://docs.google.com/spreadsheets/d/183Rw_ES98k4C2_0VyYfx8XW52ECW5wKIRy7KnRZ74k8/gviz/tq?tqx=out:csv&sheet=Лист1';
+  
   fetch(gDocLink)
     .then(csvResponse => csvResponse.text())
     .then(csvData => addToMap(csvData));
-  
+
   function addToMap(csvText) {
     csv2geojson.csv2geojson(csvText, {
-      latfield: 'lat',
-      lonfield: 'lon',
-      delimiter: ','
+        latfield: 'lat',
+        lonfield: 'lon',
+        delimiter: ','
       },
       (err, data) => {
         map.addSource('vacancies', {
@@ -48,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
               25
             ]
           }
-        }); 
-        
+        });
+
         //unclustered points
         map.addLayer({
           id: 'unclustered',
@@ -79,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'text-offset': [1, 0],
             'text-size': 12
           }
-        });        
+        });
 
         //cluster labels
         map.addLayer({
@@ -142,43 +156,38 @@ document.addEventListener('DOMContentLoaded', () => {
           anchor: 'right',
           className: 'popup'
         });
-        
+
         const clusterSource = map.getSource('vacancies');
+
         function displayPopup(e) {
-          
-          //geting hovered feature and its geometry
+          //geting clicked feature and its geometry
           const feat = e.features[0];
           const coordinates = feat.geometry.coordinates.slice();
-
+          
           if (feat.properties.cluster) {
-            var popupHTML = '';
             clusterSource.getClusterLeaves(
               feat.properties.cluster_id,
               feat.properties.point_count,
               0, (error, clusteredFeatures) => {
-                //create popup
+                //fill popup
+                popupHTML = '';
                 clusteredFeatures.forEach(f => popupHTML += getVacancyDesc(f));
-                popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
-                
-                //for map moving (unfinished)
-                var popupElement = document.querySelector('.popup');
-                var rect = popupElement.getBoundingClientRect();
-                //console.log(rect);
-
-                //event listeners for expanding vacancies data
-                var vacElements = document.querySelectorAll('.vacancy__header');
-                vacElements.forEach((e) => e.addEventListener('click', expandVac));
+                addPopup();
               });
           }
           else {
             //create popup
             popupHTML = getVacancyDesc(feat);
-            popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
-            
-            //event listeners for expanding vacancies data
-            var vacElement = document.querySelector('.vacancy__header');
-            vacElement.addEventListener('click', expandVac);
+            addPopup();
           };
+          
+          function addPopup() {
+          popup.setLngLat(coordinates).setHTML(popupHTML).addTo(map);
+
+          //event listeners for expanding vacancies data
+          var vacElements = document.querySelectorAll('.vacancy__header');            
+          vacElements.forEach((e) => e.addEventListener('click', expandVac));
+        };
         };
 
         //hovering from cluster point event
@@ -191,13 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         map.on('mouseenter', 'unclustered', () => map.getCanvas().style.cursor = 'pointer');
         map.on('mouseleave', 'clusters', hidePopup);
         map.on('mouseleave', 'unclustered', hidePopup);
-
-        //for visible vacancies list (unfinished)
-        map.on('idle', () => {
-          const feats = map.queryRenderedFeatures({layers: ['clusters']});
-          const firstHalf = feats.slice(0, Math.ceil(feats.length / 2));
-          //console.log(firstHalf);
-        });
       });
   };
+
 });
